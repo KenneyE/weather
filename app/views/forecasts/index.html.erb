@@ -3,7 +3,7 @@
 <div class="row">
   <div class="col">
     <h2>Get forecast by address</h2>
-    <%= form_with url: "/forecast", method: :get do |form| %>
+    <%= form_with method: :get do |form| %>
       <p>
         <%= form.label :street, "Street:" %>
         <%= form.text_field :street, value: params[:street] %>
@@ -28,9 +28,9 @@
     <% end %>
   </div>
   <div class="col">
-    <% if @error.present? %>
+    <% if @forecast&.dig(:error).present? %>
       <p>
-        <%= @error %>
+        <%= @forecast.dig(:error) %>
       </p>
     <% elsif @forecast&.dig(:data).present? %>
       <h2>Current Temperature: <%= @forecast[:data]["current"]["temperature_2m"] %> &deg;F</h2>
@@ -55,7 +55,7 @@
       </table>
 
       <% if @forecast[:from_cache] && @forecast[:data]["cached_at"].present? %>
-        <small>Forecast is using cached value retrieved at: <%= Time.parse(@forecast[:data]["cached_at"]).strftime("%c") %> </small>
+        <small>Forecast is using cached value retrieved <%= Time.parse(@forecast[:data]["cached_at"]).strftime("%c") %> </small>
       <% end %>
     <% end %>
   </div>

@@ -52,5 +52,14 @@ describe ForecastRetrievalService do
         expect(subject.coord_forecast(address)[:data]["daily"]["temperature_2m_max"].first).to eq(76.5)
       end
     end
+
+    context 'with a failed request' do
+      let(:status_code) { 400 }
+      let(:response_body) { Fixtures::ForcastResponse.error_response }
+
+      it 'returns an error' do
+        expect(subject.coord_forecast(address)[:error]).to eq('Unable to get the forecast')
+      end
+    end
   end
 end

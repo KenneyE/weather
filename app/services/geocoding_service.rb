@@ -4,7 +4,7 @@ class GeocodingService
   def coordinates_from_address(address)
     response = connection.get('/maps/api/geocode/json',
                               {
-                                address: format_address(address),
+                                # address: format_address(address),
                                 key: Rails.application.credentials.google.maps_api_key,
                               })
     body = JSON.parse(response.body)
@@ -15,11 +15,6 @@ class GeocodingService
       {
         latitude: location["lat"],
         longitude: location["lng"],
-        errors: []
-      }
-    else
-      {
-        error: 'Sorry, we were not able to locate that address'
       }
     end
   end

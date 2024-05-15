@@ -37,5 +37,14 @@ describe GeocodingService do
         expect(subject.coordinates_from_address(address)[:longitude]).not_to be_nil
       end
     end
+
+    context 'with a failed request' do
+      let(:status_code) { 400 }
+      let(:response_body) { Fixtures::GeocodingResponse.error_response }
+
+      it 'returns nil' do
+        expect(subject.coordinates_from_address(address)).to be_nil
+      end
+    end
   end
 end

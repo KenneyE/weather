@@ -9,8 +9,11 @@ class ForecastRetrievalService
 
     forecast_json = value_from_cache.presence || fetch_forecast(address)
 
+    parsed_data = forecast_json.present? ? JSON.parse(forecast_json) : nil
+
     {
-      data: JSON.parse(forecast_json),
+      data: parsed_data,
+      error: parsed_data.nil? ? 'Unable to get the forecast' : nil,
       from_cache: value_from_cache.present?
     }
   end
@@ -27,11 +30,14 @@ class ForecastRetrievalService
   def fetch_forecast(address)
     coordinates = GeocodingService.new.coordinates_from_address(address)
 
+    return if coordinates.nil?
+    
     response = connection.get('/v1/gfs', forecast_params(coordinates))
 
-    write_cache_value(address, response.body)
-
-    response.body
+    if response.status == 200
+      write_cache_value(address, response.body)
+      response.body
+    end
   end
 
   def forecast_params(coordinates)

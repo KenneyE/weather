@@ -97,5 +97,14 @@ module Fixtures
         "status": "OK"
       }
     end
+
+    def self.error_response
+      {
+        "error_message"=>"Invalid request. Missing the 'address', 'components', 'latlng' or 'place_id' parameter.",
+        "results"=>[],
+        "status"=>"INVALID_REQUEST"
+      }
+      end
+
   end
 end
