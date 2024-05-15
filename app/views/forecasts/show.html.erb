@@ -1,5 +1,6 @@
 <h1>Weather</h1>
 
+<h2>Get forecast by address</h2>
 <%= form_with url: "/forecast", method: :get do |form| %>
   <p>
     <%= form.label :street, "Street:" %>
@@ -29,26 +30,30 @@
   <p>
     <%= @error %>
   </p>
-<% elsif @forecast.present? %>
-  <h2>Current Temperature: <%= @forecast["current"]["temperature_2m"] %></h2>
+<% elsif @forecast&.dig(:data).present? %>
+  <hr />
+  <h2>Current Temperature: <%= @forecast[:data]["current"]["temperature_2m"] %> &deg;F</h2>
   <h2>Daily Forecast</h2>
   <table>
   <thead>
     <tr>
       <th>Date</th>
-      <th>Daily Low</th>
-      <th>Daily High</th>
+      <th>Daily Low (&deg;F)</th>
+      <th>Daily High (&deg;F)</th>
     </tr>
   </thead>
   <tbody>
-    <% @forecast["daily"]["time"].each_with_index do |time, ind| %>
+    <% @forecast[:data]["daily"]["time"].each_with_index do |time, ind| %>
       <tr>
         <td><%= time %></td>
-        <td><%= @forecast["daily"]["temperature_2m_min"][ind] %></td>
-        <td><%= @forecast["daily"]["temperature_2m_max"][ind] %></td>
+        <td><%= @forecast[:data]["daily"]["temperature_2m_min"][ind] %></td>
+        <td><%= @forecast[:data]["daily"]["temperature_2m_max"][ind] %></td>
       </tr>
     <% end %>
   </tbody>
   </table>
 
+  <% if @forecast[:from_cache] && @forecast[:data]["cached_at"].present? %>
+    <p>Forecast is using cached value retrieved at: <%= Time.parse(@forecast[:data]["cached_at"]).strftime("%c") %> </p>
+  <% end %>
 <% end %>

@@ -1,6 +1,6 @@
 class ForecastsController < ApplicationController
   def show
-    @forecast = ForecastRetrievalService.coord_forecast(address_params)
+    @forecast = ForecastRetrievalService.new.coord_forecast(address_params)
   end
 
   private
