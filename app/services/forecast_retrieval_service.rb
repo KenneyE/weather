@@ -18,7 +18,7 @@ class ForecastRetrievalService
   def connection
     @connection ||= Faraday.new(
       url: BASE_URL,
-      headers: {'Content-Type' => 'application/json'}
+      headers: { 'Content-Type' => 'application/json' }
     )
   end
 
@@ -38,7 +38,7 @@ class ForecastRetrievalService
     {
       latitude: coordinates[:latitude],
       longitude: coordinates[:longitude],
-    current: "temperature_2m",
+      current: "temperature_2m",
       daily: ["temperature_2m_max", "temperature_2m_min"],
       temperature_unit: "fahrenheit",
       wind_speed_unit: "mph",

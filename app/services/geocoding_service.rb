@@ -3,10 +3,10 @@ class GeocodingService
 
   def coordinates_from_address(address)
     response = connection.get('/maps/api/geocode/json',
-      {
-        address: format_address(address),
-        key: Rails.application.credentials.google.maps_api_key,
-    })
+                              {
+                                address: format_address(address),
+                                key: Rails.application.credentials.google.maps_api_key,
+                              })
     body = JSON.parse(response.body)
 
     if response.status == 200
@@ -27,7 +27,7 @@ class GeocodingService
   def connection
     @connection ||= Faraday.new(
       url: BASE_URL,
-      headers: {'Content-Type' => 'application/json'}
+      headers: { 'Content-Type' => 'application/json' }
     )
   end
 
