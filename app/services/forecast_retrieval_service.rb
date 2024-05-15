@@ -31,7 +31,7 @@ class ForecastRetrievalService
     coordinates = GeocodingService.new.coordinates_from_address(address)
 
     return if coordinates.nil?
-    
+
     response = connection.get('/v1/gfs', forecast_params(coordinates))
 
     if response.status == 200

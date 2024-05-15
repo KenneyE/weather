@@ -39,7 +39,7 @@ module Fixtures
     def self.error_response
       { "error" => true,
         "reason" =>
-         "Data corrupted at path ''. Cannot initialize SurfaceAndPressureVariable<VariableAndPreviousDay, ForecastPressureVariable> from invalid String value temperatdfsfdure_2m." }
+         "Data corrupted at path ''. Cannot initialize SurfaceAndPressureVariable from invalid String value invalid." }
     end
   end
 end

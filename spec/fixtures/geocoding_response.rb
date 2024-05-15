@@ -100,11 +100,10 @@ module Fixtures
 
     def self.error_response
       {
-        "error_message"=>"Invalid request. Missing the 'address', 'components', 'latlng' or 'place_id' parameter.",
-        "results"=>[],
-        "status"=>"INVALID_REQUEST"
+        "error_message" => "Invalid request. Missing the 'address', 'components', 'latlng' or 'place_id' parameter.",
+        "results" => [],
+        "status" => "INVALID_REQUEST"
       }
-      end
-
+    end
   end
 end
