@@ -1,0 +1,54 @@
+<h1>Weather</h1>
+
+<%= form_with url: "/forecast", method: :get do |form| %>
+  <p>
+    <%= form.label :street, "Street:" %>
+    <%= form.text_field :street, value: params[:street] %>
+  </p>
+
+  <p>
+    <%= form.label :city, "City:" %>
+    <%= form.text_field :city, value: params[:city] %>
+  </p>
+
+  <p>
+    <%= form.label :state, "State:" %>
+    <%= form.text_field :state, value: params[:state] %>
+  </p>
+
+  <p>
+    <%= form.label :zip, "Zip:" %>
+    <%= form.text_field :zip, value: params[:zip] %>
+  </p>
+
+  <%= form.submit "Search" %>
+<% end %>
+
+
+<% if @error.present? %>
+  <p>
+    <%= @error %>
+  </p>
+<% elsif @forecast.present? %>
+  <h2>Current Temperature: <%= @forecast["current"]["temperature_2m"] %></h2>
+  <h2>Daily Forecast</h2>
+  <table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Daily Low</th>
+      <th>Daily High</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @forecast["daily"]["time"].each_with_index do |time, ind| %>
+      <tr>
+        <td><%= time %></td>
+        <td><%= @forecast["daily"]["temperature_2m_min"][ind] %></td>
+        <td><%= @forecast["daily"]["temperature_2m_max"][ind] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  </table>
+
+<% end %>
