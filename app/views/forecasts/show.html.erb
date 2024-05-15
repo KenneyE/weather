@@ -1,59 +1,62 @@
 <h1>Weather</h1>
 
-<h2>Get forecast by address</h2>
-<%= form_with url: "/forecast", method: :get do |form| %>
-  <p>
-    <%= form.label :street, "Street:" %>
-    <%= form.text_field :street, value: params[:street] %>
-  </p>
+<div class="row">
+  <div class="col">
+    <h2>Get forecast by address</h2>
+    <%= form_with url: "/forecast", method: :get do |form| %>
+      <p>
+        <%= form.label :street, "Street:" %>
+        <%= form.text_field :street, value: params[:street] %>
+      </p>
 
-  <p>
-    <%= form.label :city, "City:" %>
-    <%= form.text_field :city, value: params[:city] %>
-  </p>
+      <p>
+        <%= form.label :city, "City:" %>
+        <%= form.text_field :city, value: params[:city] %>
+      </p>
 
-  <p>
-    <%= form.label :state, "State:" %>
-    <%= form.text_field :state, value: params[:state] %>
-  </p>
+      <p>
+        <%= form.label :state, "State:" %>
+        <%= form.text_field :state, value: params[:state] %>
+      </p>
 
-  <p>
-    <%= form.label :zip, "Zip:" %>
-    <%= form.text_field :zip, value: params[:zip] %>
-  </p>
+      <p>
+        <%= form.label :zip, "Zip:" %>
+        <%= form.text_field :zip, value: params[:zip] %>
+      </p>
 
-  <%= form.submit "Search" %>
-<% end %>
-
-
-<% if @error.present? %>
-  <p>
-    <%= @error %>
-  </p>
-<% elsif @forecast&.dig(:data).present? %>
-  <hr />
-  <h2>Current Temperature: <%= @forecast[:data]["current"]["temperature_2m"] %> &deg;F</h2>
-  <h2>Daily Forecast</h2>
-  <table>
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Daily Low (&deg;F)</th>
-      <th>Daily High (&deg;F)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @forecast[:data]["daily"]["time"].each_with_index do |time, ind| %>
-      <tr>
-        <td><%= time %></td>
-        <td><%= @forecast[:data]["daily"]["temperature_2m_min"][ind] %></td>
-        <td><%= @forecast[:data]["daily"]["temperature_2m_max"][ind] %></td>
-      </tr>
+      <%= form.submit "Search" %>
     <% end %>
-  </tbody>
-  </table>
+  </div>
+  <div class="col">
+    <% if @error.present? %>
+      <p>
+        <%= @error %>
+      </p>
+    <% elsif @forecast&.dig(:data).present? %>
+      <h2>Current Temperature: <%= @forecast[:data]["current"]["temperature_2m"] %> &deg;F</h2>
+      <h2>Daily Forecast</h2>
+      <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Daily Low (&deg;F)</th>
+          <th>Daily High (&deg;F)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @forecast[:data]["daily"]["time"].each_with_index do |time, ind| %>
+          <tr>
+            <td><%= time %></td>
+            <td><%= @forecast[:data]["daily"]["temperature_2m_min"][ind] %></td>
+            <td><%= @forecast[:data]["daily"]["temperature_2m_max"][ind] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      </table>
 
-  <% if @forecast[:from_cache] && @forecast[:data]["cached_at"].present? %>
-    <p>Forecast is using cached value retrieved at: <%= Time.parse(@forecast[:data]["cached_at"]).strftime("%c") %> </p>
-  <% end %>
-<% end %>
+      <% if @forecast[:from_cache] && @forecast[:data]["cached_at"].present? %>
+        <small>Forecast is using cached value retrieved at: <%= Time.parse(@forecast[:data]["cached_at"]).strftime("%c") %> </small>
+      <% end %>
+    <% end %>
+  </div>
+</div>
