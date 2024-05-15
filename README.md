@@ -22,7 +22,6 @@ google:
   maps_api_key: YOUR_API_KEY
 ```
 
-
 ## Running Tests
 
 To run the automated tests, simply run `bundle exec rspec`
