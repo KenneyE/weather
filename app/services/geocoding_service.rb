@@ -1,8 +1,8 @@
 class GeocodingService
-  BASE_URL = 'https://maps.googleapis.com/maps/api/geocode/json'.freeze
+  BASE_URL = 'https://maps.googleapis.com'.freeze
 
-  def self.coordinates_from_address(address)
-    response = Faraday.get(BASE_URL,
+  def coordinates_from_address(address)
+    response = connection.get('/maps/api/geocode/json',
       {
         address: format_address(address),
         key: Rails.application.credentials.google.maps_api_key,
@@ -24,9 +24,16 @@ class GeocodingService
     end
   end
 
+  def connection
+    @connection ||= Faraday.new(
+      url: BASE_URL,
+      headers: {'Content-Type' => 'application/json'}
+    )
+  end
+
   private
 
-  def self.format_address(address)
+  def format_address(address)
     [address[:street], address[:city], address[:state], address[:zip]].map do |address_component|
       address_component.gsub(' ', '+')
     end.join(' ')

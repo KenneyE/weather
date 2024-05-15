@@ -1,5 +1,5 @@
 class ForecastRetrievalService
-  BASE_URL = 'https://api.open-meteo.com/v1/gfs'.freeze
+  BASE_URL = 'https://api.open-meteo.com'.freeze
 
   def coord_forecast(address)
     # No address provided
@@ -15,12 +15,19 @@ class ForecastRetrievalService
     }
   end
 
+  def connection
+    @connection ||= Faraday.new(
+      url: BASE_URL,
+      headers: {'Content-Type' => 'application/json'}
+    )
+  end
+
   private
 
   def fetch_forecast(address)
-    coordinates = GeocodingService.coordinates_from_address(address)
+    coordinates = GeocodingService.new.coordinates_from_address(address)
 
-    response = Faraday.get(BASE_URL, forecast_params(coordinates))
+    response = connection.get('/v1/gfs', forecast_params(coordinates))
 
     write_cache_value(address, response.body)
 
