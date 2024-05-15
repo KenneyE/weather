@@ -1,3 +1,4 @@
+# This service relies on Open-Meteo to fetch forecast values based on a provided address.
 class ForecastRetrievalService
   BASE_URL = 'https://api.open-meteo.com'.freeze
 
@@ -5,8 +6,8 @@ class ForecastRetrievalService
     # No address provided
     return if address.to_h.all?(:empty?)
 
+    # Check the Redis cache. If a value is present, use that instead of hitting any APIs.
     value_from_cache = cached_value(address)
-
     forecast_json = value_from_cache.presence || fetch_forecast(address)
 
     parsed_data = forecast_json.present? ? JSON.parse(forecast_json) : nil
@@ -35,6 +36,7 @@ class ForecastRetrievalService
     response = connection.get('/v1/gfs', forecast_params(coordinates))
 
     if response.status == 200
+      # Cache this value in Redis
       write_cache_value(address, response.body)
       response.body
     end

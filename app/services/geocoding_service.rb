@@ -28,6 +28,8 @@ class GeocodingService
 
   private
 
+  # Format the address as expected by the Google Maps API. Replace spaces within an address component
+  # with "+" signs and join address components with a space.
   def format_address(address)
     [address[:street], address[:city], address[:state], address[:zip]].map do |address_component|
       address_component.gsub(' ', '+')
